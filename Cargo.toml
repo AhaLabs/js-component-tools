@@ -1,5 +1,10 @@
 [workspace]
-members = ["crates/js-component-bindgen", "crates/js-component-bindgen-component", "crates/wasm-tools-component"]
+members = [
+    "crates/js-component-bindgen",
+    "crates/js-component-bindgen-component",
+    "crates/wasm-tools-component",
+    "crates/wasm-xdr-tools-component",
+]
 resolver = "2"
 
 [workspace.package]
@@ -10,17 +15,21 @@ version = "0.1.0"
 anyhow = "1.0.65"
 base64 = "0.13.1"
 bitflags = "1.3.2"
-heck =  { version = "0.4", features = ["unicode"] }
+heck = { version = "0.4", features = ["unicode"] }
 pulldown-cmark = { version = "0.8", default-features = false }
 clap = { version = "4.0.9", features = ["derive"] }
 env_logger = "0.9.1"
 indexmap = "1.9"
-wasmtime = { git = 'https://github.com/bytecodealliance/wasmtime', features = ["component-model"] }
+wasmtime = { git = 'https://github.com/bytecodealliance/wasmtime', features = [
+    "component-model",
+] }
 wasmtime-environ = { git = 'https://github.com/bytecodealliance/wasmtime' }
 wasmprinter = "0.2.46"
 wasmparser = "0.97.0"
 wasm-encoder = "0.21.0"
 wat = "1.0.53"
-wit-bindgen-guest-rust = { git = 'https://github.com/bytecodealliance/wit-bindgen', default-features = false, features = ['macros'] }
+wit-bindgen-guest-rust = { git = 'https://github.com/bytecodealliance/wit-bindgen', default-features = false, features = [
+    'macros',
+] }
 wit-component = "0.4.1"
 wit-parser = "0.4.0"

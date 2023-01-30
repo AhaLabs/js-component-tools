@@ -1,0 +1,12 @@
+default world wasm-tools-js {
+  import console: pkg.console
+
+  export exports: interface {
+
+    /// Encodes the given json string into xdr format
+    encode-args: func(wasm: list<u8>, contract-id: string, func-name: string, json-args: string) -> result<list<u8>, string>
+
+    /// Decodes raw xdr into json
+    decode-args: func(wasm: list<u8>, func-name: string, xdr-args: list<u8>) -> result<string, string>
+  }
+}
