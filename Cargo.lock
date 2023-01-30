@@ -1199,7 +1199,7 @@ checksum = "73473c0e59e6d5812c5dfe2a064a6444949f089e20eec9a2e5506596494e4623"
 [[package]]
 name = "strval"
 version = "0.4.0"
-source = "git+https://github.com/AhaLabs/soroban-tools?rev=0b569a664b193bf269676c9bd27d216c897f0985#0b569a664b193bf269676c9bd27d216c897f0985"
+source = "git+https://github.com/AhaLabs/soroban-tools?rev=539a9490d882ac442321cea8d44ed4f8952eaeed#539a9490d882ac442321cea8d44ed4f8952eaeed"
 dependencies = [
  "base64",
  "crate-git-revision",
