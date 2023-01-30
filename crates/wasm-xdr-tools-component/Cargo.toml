@@ -10,13 +10,18 @@ test = false
 doctest = false
 
 [dependencies]
-anyhow = { workspace = true }
 wit-bindgen-guest-rust = { workspace = true, features = ['default'] }
-strval = { git = "https://github.com/AhaLabs/soroban-tools", rev = "539a9490d882ac442321cea8d44ed4f8952eaeed"}
+strval = { git = "https://github.com/AhaLabs/soroban-tools", rev = "64b80dfff7361873669b5052d5e9733436ea3eae"}
 # strval = { path = "../../../s/soroban-cli/cmd/strval" }
 serde_json = "1.0.82"
+
 
 [dependencies.soroban-env-host]
 version = "0.0.12"
 git = "https://github.com/stellar/rs-soroban-env"
 rev = "993c527abce72748405d71467498bffd63e061c1"
+
+[dependencies.soroban-ledger-snapshot]
+version = "0.4.1"
+git = "https://github.com/stellar/rs-soroban-sdk"
+rev = "e1c3de33942f0e997680645941787102ebf61e85"

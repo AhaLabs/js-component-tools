@@ -62,7 +62,7 @@ let exports2;
 let realloc0;
 let postReturn0;
 export const exports = {
-  decodeArgs(arg0, arg1, arg2) {
+  decodeRet(arg0, arg1, arg2) {
     const val0 = arg0;
     const len0 = val0.byteLength;
     const ptr0 = realloc0(0, 0, 1, len0 * 1);
@@ -75,7 +75,7 @@ export const exports = {
     const ptr2 = realloc0(0, 0, 1, len2 * 1);
     const src2 = new Uint8Array(val2.buffer || val2, val2.byteOffset, len2 * 1);
     (new Uint8Array(memory0.buffer, ptr2, len2 * 1)).set(src2);
-    const ret = exports1['exports#decode-args'](ptr0, len0, ptr1, len1, ptr2, len2);
+    const ret = exports1['exports#decode-ret'](ptr0, len0, ptr1, len1, ptr2, len2);
     let variant5;
     switch (dataView(memory0).getUint8(ret + 0, true)) {
       case 0: {
@@ -153,6 +153,51 @@ export const exports = {
     }
     return variant6.val;
   },
+  run(arg0, arg1, arg2, arg3) {
+    const val0 = arg0;
+    const len0 = val0.byteLength;
+    const ptr0 = realloc0(0, 0, 1, len0 * 1);
+    const src0 = new Uint8Array(val0.buffer || val0, val0.byteOffset, len0 * 1);
+    (new Uint8Array(memory0.buffer, ptr0, len0 * 1)).set(src0);
+    const ptr1 = utf8Encode(arg1, realloc0, memory0);
+    const len1 = utf8EncodedLen;
+    const ptr2 = utf8Encode(arg2, realloc0, memory0);
+    const len2 = utf8EncodedLen;
+    const ptr3 = utf8Encode(arg3, realloc0, memory0);
+    const len3 = utf8EncodedLen;
+    const ret = exports1['exports#run'](ptr0, len0, ptr1, len1, ptr2, len2, ptr3, len3);
+    let variant6;
+    switch (dataView(memory0).getUint8(ret + 0, true)) {
+      case 0: {
+        const ptr4 = dataView(memory0).getInt32(ret + 4, true);
+        const len4 = dataView(memory0).getInt32(ret + 8, true);
+        const result4 = utf8Decoder.decode(new Uint8Array(memory0.buffer, ptr4, len4));
+        variant6= {
+          tag: 'ok',
+          val: result4
+        };
+        break;
+      }
+      case 1: {
+        const ptr5 = dataView(memory0).getInt32(ret + 4, true);
+        const len5 = dataView(memory0).getInt32(ret + 8, true);
+        const result5 = utf8Decoder.decode(new Uint8Array(memory0.buffer, ptr5, len5));
+        variant6= {
+          tag: 'err',
+          val: result5
+        };
+        break;
+      }
+      default: {
+        throw new TypeError('invalid variant discriminant for expected');
+      }
+    }
+    postReturn0(ret);
+    if (variant6.tag === 'err') {
+      throw new ComponentError(variant6.val);
+    }
+    return variant6.val;
+  },
   
 };
 
@@ -182,7 +227,7 @@ const $init = (async() => {
     },
   }));
   realloc0 = exports1.cabi_realloc;
-  postReturn0 = exports1['cabi_post_exports#decode-args'];
+  postReturn0 = exports1['cabi_post_exports#decode-ret'];
 })();
 
 await $init;

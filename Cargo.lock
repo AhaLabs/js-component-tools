@@ -1098,6 +1098,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "soroban-ledger-snapshot"
+version = "0.4.3"
+source = "git+https://github.com/stellar/rs-soroban-sdk?rev=e1c3de33942f0e997680645941787102ebf61e85#e1c3de33942f0e997680645941787102ebf61e85"
+dependencies = [
+ "serde",
+ "serde_json",
+ "soroban-env-host",
+ "thiserror",
+]
+
+[[package]]
 name = "soroban-native-sdk-macros"
 version = "0.0.12"
 source = "git+https://github.com/stellar/rs-soroban-env?rev=993c527abce72748405d71467498bffd63e061c1#993c527abce72748405d71467498bffd63e061c1"
@@ -1199,7 +1210,7 @@ checksum = "73473c0e59e6d5812c5dfe2a064a6444949f089e20eec9a2e5506596494e4623"
 [[package]]
 name = "strval"
 version = "0.4.0"
-source = "git+https://github.com/AhaLabs/soroban-tools?rev=539a9490d882ac442321cea8d44ed4f8952eaeed#539a9490d882ac442321cea8d44ed4f8952eaeed"
+source = "git+https://github.com/AhaLabs/soroban-tools?rev=64b80dfff7361873669b5052d5e9733436ea3eae#64b80dfff7361873669b5052d5e9733436ea3eae"
 dependencies = [
  "base64",
  "crate-git-revision",
@@ -1496,9 +1507,9 @@ dependencies = [
 name = "wasm-xdr-tools-js"
 version = "0.1.0"
 dependencies = [
- "anyhow",
  "serde_json",
  "soroban-env-host",
+ "soroban-ledger-snapshot",
  "strval",
  "wit-bindgen-guest-rust",
 ]
