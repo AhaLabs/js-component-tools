@@ -61,8 +61,6 @@ let memory0;
 let exports2;
 let realloc0;
 let postReturn0;
-let postReturn1;
-let postReturn2;
 export const exports = {
   createOp(arg0, arg1, arg2, arg3) {
     const val0 = arg0;
@@ -149,7 +147,7 @@ export const exports = {
         throw new TypeError('invalid variant discriminant for expected');
       }
     }
-    postReturn1(ret);
+    postReturn0(ret);
     if (variant5.tag === 'err') {
       throw new ComponentError(variant5.val);
     }
@@ -194,7 +192,7 @@ export const exports = {
         throw new TypeError('invalid variant discriminant for expected');
       }
     }
-    postReturn2(ret);
+    postReturn0(ret);
     if (variant6.tag === 'err') {
       throw new ComponentError(variant6.val);
     }
@@ -230,8 +228,6 @@ const $init = (async() => {
   }));
   realloc0 = exports1.cabi_realloc;
   postReturn0 = exports1['cabi_post_exports#create-op'];
-  postReturn1 = exports1['cabi_post_exports#decode-ret'];
-  postReturn2 = exports1['cabi_post_exports#run'];
 })();
 
 await $init;
