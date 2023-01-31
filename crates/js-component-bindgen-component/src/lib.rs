@@ -30,7 +30,7 @@ macro_rules! uwriteln {
 
 wit_bindgen_guest_rust::generate!("js-component-bindgen");
 
-use crate::exports::*;
+use crate::exports::{ExportType, GenerateOptions, Transpiled};
 
 struct JsComponentBindgenComponent;
 
@@ -55,10 +55,7 @@ impl exports::Exports for JsComponentBindgenComponent {
             name: options.name,
             no_typescript: options.no_typescript.unwrap_or(false),
             instantiation: options.instantiation.unwrap_or(false),
-            map: match options.map {
-                Some(map) => Some(map.into_iter().collect()),
-                None => None,
-            },
+            map: options.map.map(|map| map.into_iter().collect()),
             compat: options.compat.unwrap_or(false),
             no_nodejs_compat: options.no_nodejs_compat.unwrap_or(false),
             base64_cutoff: options.base64_cutoff.unwrap_or(5000) as usize,
@@ -71,8 +68,7 @@ impl exports::Exports for JsComponentBindgenComponent {
             imports,
             mut exports,
         } = transpile(component, opts)
-            .map_err(|e| format!("{:?}", e))
-            .map_err(|e| e.to_string())?;
+            .map_err(|e| format!("{e:?}"))?;
 
         Ok(Transpiled {
             files,

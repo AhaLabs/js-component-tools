@@ -1,5 +1,5 @@
 use std::sync::Once;
-use wasmparser;
+
 use wit_component::{ComponentEncoder, DecodedWasm, DocumentPrinter};
 
 wit_bindgen_guest_rust::generate!("wasm-tools");
@@ -23,13 +23,13 @@ impl exports::Exports for WasmToolsJs {
     fn print(component: Vec<u8>) -> Result<String, String> {
         init();
 
-        wasmprinter::print_bytes(component).map_err(|e| format!("{:?}", e))
+        wasmprinter::print_bytes(component).map_err(|e| format!("{e:?}"))
     }
 
     fn parse(wat: String) -> Result<Vec<u8>, String> {
         init();
 
-        wat::parse_str(wat).map_err(|e| format!("{:?}", e))
+        wat::parse_str(wat).map_err(|e| format!("{e:?}"))
     }
 
     fn component_new(
@@ -41,19 +41,19 @@ impl exports::Exports for WasmToolsJs {
         let mut encoder = ComponentEncoder::default()
             .validate(true)
             .module(&binary)
-            .map_err(|e| format!("Failed to decode Wasm\n{:?}", e))?;
+            .map_err(|e| format!("Failed to decode Wasm\n{e:?}"))?;
 
         if let Some(adapters) = adapters {
             for (name, binary) in adapters {
                 encoder = encoder
                     .adapter(&name, &binary)
-                    .map_err(|e| format!("{:?}", e))?;
+                    .map_err(|e| format!("{e:?}"))?;
             }
         }
 
         let bytes = encoder
             .encode()
-            .map_err(|e| format!("failed to encode a component from module\n${:?}", e))?;
+            .map_err(|e| format!("failed to encode a component from module\n${e:?}"))?;
 
         Ok(bytes)
     }
@@ -62,7 +62,7 @@ impl exports::Exports for WasmToolsJs {
         init();
 
         let decoded = wit_component::decode(&name.unwrap_or(String::from("component")), &binary)
-            .map_err(|e| format!("Failed to decode wit component\n{:?}", e))?;
+            .map_err(|e| format!("Failed to decode wit component\n{e:?}"))?;
 
         // let world = decode_world("component", &binary);
 
@@ -73,7 +73,7 @@ impl exports::Exports for WasmToolsJs {
 
         let output = DocumentPrinter::default()
             .print(decoded.resolve(), doc)
-            .map_err(|e| format!("Unable to print wit\n${:?}", e))?;
+            .map_err(|e| format!("Unable to print wit\n${e:?}"))?;
         Ok(output)
     }
 
@@ -86,7 +86,7 @@ impl exports::Exports for WasmToolsJs {
         let mut last_consumed = 0;
         loop {
             bytes = &bytes[last_consumed..];
-            let payload = match parser.parse(bytes, true).map_err(|e| format!("{:?}", e))? {
+            let payload = match parser.parse(bytes, true).map_err(|e| format!("{e:?}"))? {
                 wasmparser::Chunk::NeedMoreData(_) => unreachable!(),
                 wasmparser::Chunk::Parsed { payload, consumed } => {
                     last_consumed = consumed;

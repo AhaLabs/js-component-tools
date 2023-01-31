@@ -61,7 +61,54 @@ let memory0;
 let exports2;
 let realloc0;
 let postReturn0;
+let postReturn1;
+let postReturn2;
 export const exports = {
+  createOp(arg0, arg1, arg2, arg3) {
+    const val0 = arg0;
+    const len0 = val0.byteLength;
+    const ptr0 = realloc0(0, 0, 1, len0 * 1);
+    const src0 = new Uint8Array(val0.buffer || val0, val0.byteOffset, len0 * 1);
+    (new Uint8Array(memory0.buffer, ptr0, len0 * 1)).set(src0);
+    const ptr1 = utf8Encode(arg1, realloc0, memory0);
+    const len1 = utf8EncodedLen;
+    const ptr2 = utf8Encode(arg2, realloc0, memory0);
+    const len2 = utf8EncodedLen;
+    const ptr3 = utf8Encode(arg3, realloc0, memory0);
+    const len3 = utf8EncodedLen;
+    const ret = exports1['exports#create-op'](ptr0, len0, ptr1, len1, ptr2, len2, ptr3, len3);
+    let variant6;
+    switch (dataView(memory0).getUint8(ret + 0, true)) {
+      case 0: {
+        const ptr4 = dataView(memory0).getInt32(ret + 4, true);
+        const len4 = dataView(memory0).getInt32(ret + 8, true);
+        const result4 = new Uint8Array(memory0.buffer.slice(ptr4, ptr4 + len4 * 1));
+        variant6= {
+          tag: 'ok',
+          val: result4
+        };
+        break;
+      }
+      case 1: {
+        const ptr5 = dataView(memory0).getInt32(ret + 4, true);
+        const len5 = dataView(memory0).getInt32(ret + 8, true);
+        const result5 = utf8Decoder.decode(new Uint8Array(memory0.buffer, ptr5, len5));
+        variant6= {
+          tag: 'err',
+          val: result5
+        };
+        break;
+      }
+      default: {
+        throw new TypeError('invalid variant discriminant for expected');
+      }
+    }
+    postReturn0(ret);
+    if (variant6.tag === 'err') {
+      throw new ComponentError(variant6.val);
+    }
+    return variant6.val;
+  },
   decodeRet(arg0, arg1, arg2) {
     const val0 = arg0;
     const len0 = val0.byteLength;
@@ -102,56 +149,11 @@ export const exports = {
         throw new TypeError('invalid variant discriminant for expected');
       }
     }
-    postReturn0(ret);
+    postReturn1(ret);
     if (variant5.tag === 'err') {
       throw new ComponentError(variant5.val);
     }
     return variant5.val;
-  },
-  encodeArgs(arg0, arg1, arg2, arg3) {
-    const val0 = arg0;
-    const len0 = val0.byteLength;
-    const ptr0 = realloc0(0, 0, 1, len0 * 1);
-    const src0 = new Uint8Array(val0.buffer || val0, val0.byteOffset, len0 * 1);
-    (new Uint8Array(memory0.buffer, ptr0, len0 * 1)).set(src0);
-    const ptr1 = utf8Encode(arg1, realloc0, memory0);
-    const len1 = utf8EncodedLen;
-    const ptr2 = utf8Encode(arg2, realloc0, memory0);
-    const len2 = utf8EncodedLen;
-    const ptr3 = utf8Encode(arg3, realloc0, memory0);
-    const len3 = utf8EncodedLen;
-    const ret = exports1['exports#encode-args'](ptr0, len0, ptr1, len1, ptr2, len2, ptr3, len3);
-    let variant6;
-    switch (dataView(memory0).getUint8(ret + 0, true)) {
-      case 0: {
-        const ptr4 = dataView(memory0).getInt32(ret + 4, true);
-        const len4 = dataView(memory0).getInt32(ret + 8, true);
-        const result4 = new Uint8Array(memory0.buffer.slice(ptr4, ptr4 + len4 * 1));
-        variant6= {
-          tag: 'ok',
-          val: result4
-        };
-        break;
-      }
-      case 1: {
-        const ptr5 = dataView(memory0).getInt32(ret + 4, true);
-        const len5 = dataView(memory0).getInt32(ret + 8, true);
-        const result5 = utf8Decoder.decode(new Uint8Array(memory0.buffer, ptr5, len5));
-        variant6= {
-          tag: 'err',
-          val: result5
-        };
-        break;
-      }
-      default: {
-        throw new TypeError('invalid variant discriminant for expected');
-      }
-    }
-    postReturn0(ret);
-    if (variant6.tag === 'err') {
-      throw new ComponentError(variant6.val);
-    }
-    return variant6.val;
   },
   run(arg0, arg1, arg2, arg3) {
     const val0 = arg0;
@@ -192,7 +194,7 @@ export const exports = {
         throw new TypeError('invalid variant discriminant for expected');
       }
     }
-    postReturn0(ret);
+    postReturn2(ret);
     if (variant6.tag === 'err') {
       throw new ComponentError(variant6.val);
     }
@@ -227,7 +229,9 @@ const $init = (async() => {
     },
   }));
   realloc0 = exports1.cabi_realloc;
-  postReturn0 = exports1['cabi_post_exports#decode-ret'];
+  postReturn0 = exports1['cabi_post_exports#create-op'];
+  postReturn1 = exports1['cabi_post_exports#decode-ret'];
+  postReturn2 = exports1['cabi_post_exports#run'];
 })();
 
 await $init;

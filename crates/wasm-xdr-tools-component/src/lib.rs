@@ -1,17 +1,15 @@
 use soroban_env_host::{
-    storage::Storage,
-    xdr::{HostFunction, WriteXdr},
-    Host,
+    xdr::{WriteXdr},
 };
-use soroban_ledger_snapshot::LedgerSnapshot;
-use std::sync::Once;
+use std::{sync::Once};
+
 use strval::Spec;
 
-wit_bindgen_guest_rust::generate!("wasm-tools");
+wit_bindgen_guest_rust::generate!("wasm-xdr-tools");
 
-struct WasmToolsJs;
+struct WasmToolsJs(Vec<u8>);
 
-export_wasm_tools_js!(WasmToolsJs);
+export_wasm_xdr_tools_js!(WasmToolsJs);
 
 fn init() {
     static INIT: Once = Once::new();
@@ -25,18 +23,21 @@ fn init() {
 }
 
 impl exports::Exports for WasmToolsJs {
-    fn encode_args(
+    fn create_op(
         wasm: Vec<u8>,
         contract_id: String,
         func_name: String,
         json_args: String,
     ) -> Result<Vec<u8>, String> {
         init();
-        let spec = Spec::from_wasm(&wasm).map_err(|e| e.to_string())?;
-        let res = spec
-            .encode_args(&contract_id, &func_name, &json_args)
-            .map_err(|e| e.to_string())?;
-        res.to_xdr().map_err(|e| e.to_string())
+        Spec::from_wasm(&wasm)
+            .and_then(|spec| {
+                let contract_id_bytes = strval::utils::id_from_str(&contract_id).unwrap();
+                Ok(spec
+                    .create_op(&contract_id_bytes, &func_name, &json_args)?
+                    .to_xdr()?)
+            })
+            .map_err(|e| e.to_string())
     }
 
     fn decode_ret(wasm: Vec<u8>, func_name: String, xdr_ret: Vec<u8>) -> Result<String, String> {
@@ -53,25 +54,11 @@ impl exports::Exports for WasmToolsJs {
         json_args: String,
     ) -> Result<String, String> {
         init();
-
         Spec::from_wasm(&wasm)
             .and_then(|spec| {
-                let state = LedgerSnapshot::default();
-                let storage = Storage::default();
-                let h = Host::with_storage_and_budget(storage, Default::default());
-
-                let mut ledger_info = state.ledger_info();
-                ledger_info.sequence_number += 1;
-                ledger_info.timestamp += 5;
-                h.set_ledger_info(ledger_info);
-                let args = spec.encode_args(&contract_id, &func_name, &json_args)?;
-                let xdr_return = h
-                    .invoke_function(HostFunction::InvokeContract(args))
-                    .unwrap()
-                    .to_xdr()
-                    .unwrap();
-                spec.decode_args(&func_name, &xdr_return)
+                spec.run(wasm, &contract_id, &func_name, &json_args)
             })
             .map_err(|e| e.to_string())
     }
 }
+
