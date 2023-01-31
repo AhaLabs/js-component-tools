@@ -27,7 +27,7 @@
     "build:self": "npm run build:set-self && npm run build:dev && ./build-dist.sh",
     "build:set-last": "echo './node_modules/.bin/jsct $@' > jsct.sh && chmod +x jsct.sh",
     "build:set-self": "echo './src/jsct.js $@' > jsct.sh && chmod +x jsct.sh",
-    "build:dev": "npm run build:wasm && mkdir -p obj && npm run build:js-component-bindgen-component && npm run build:wasm-tools && npm run build:component:wasm-xdr && npm run build:transpile:wasm-xdr",
+    "build:dev": "npm run build:wasm && mkdir -p obj && npm run build:js-component-bindgen-component && npm run build:dev:wasm-tools && npm run build:component:wasm-xdr && npm run build:dev:transpile:wasm-xdr",
     "build:wasm": "cargo build --workspace --target wasm32-unknown-unknown --release",
     "build:wasm:dev": "cargo build --workspace --target wasm32-unknown-unknown",
     "build:js-component-bindgen-component": "npm run build:component:js-component-bindgen-component && npm run build:transpile:js-component-bindgen-component",
